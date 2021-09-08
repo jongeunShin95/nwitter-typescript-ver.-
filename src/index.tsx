@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
-import firebase from './firebase';
+import { authService } from './fbase';
 
-console.log(firebase);
+// console.log(fbase);
 
 ReactDOM.render(
   <React.StrictMode>
