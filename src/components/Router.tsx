@@ -5,7 +5,7 @@ import Home from '../routes/Home';
 import { User } from 'firebase';
 
 type RouterProps = {
-    isLoggedIn: User | null
+    isLoggedIn: boolean | null
 };
 
 export default ({ isLoggedIn }: RouterProps) => {
