@@ -1,10 +1,16 @@
 import React, { FormEvent, useState } from 'react';
+import { dbService } from '../fbase';
 
 const Home = () => {
     const [nweet, setNweet] = useState('');
 
-    const onSubmit = (e: FormEvent) => {
+    const onSubmit = async (e: FormEvent) => {
         e.preventDefault();
+        await dbService.collection("nweets").add({
+            nweet,
+            createdAt: Date.now(),
+        });
+        setNweet("");
     }
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
