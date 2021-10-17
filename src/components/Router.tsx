@@ -2,15 +2,16 @@ import React, { useState } from 'react';
 import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Auth from '../routes/Auth';
 import Home from '../routes/Home';
-import { User } from 'firebase';
+import firebase, { User } from 'firebase';
 import Navigation from './Navigation';
 import Profile from '../routes/Profile';
 
 type RouterProps = {
-    isLoggedIn: boolean | null
+    isLoggedIn: boolean | null,
+    userObj: firebase.User | null
 };
 
-export default ({ isLoggedIn }: RouterProps) => {
+export default ({ isLoggedIn, userObj }: RouterProps) => {
     return (
         <Router>
             { isLoggedIn && <Navigation /> }
@@ -18,7 +19,7 @@ export default ({ isLoggedIn }: RouterProps) => {
                 { isLoggedIn ?
                     <>
                         <Route exact path="/">
-                            <Home />
+                            <Home userObj={userObj} />
                         </Route>
                         <Route exact path="/profile">
                             <Profile />
