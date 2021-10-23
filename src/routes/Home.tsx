@@ -1,5 +1,7 @@
 import firebase from 'firebase';
 import React, { FormEvent, useEffect, useState } from 'react';
+import Nweet from '../components/Nweet';
+
 import { dbService } from '../fbase';
 
 type nweetType = {
@@ -48,9 +50,7 @@ const Home = ({ userObj }: HomeProps) => {
             </form>
             <div>
                 { nweets.map((nweet: nweetType) => 
-                    <div key={ nweet.id }>
-                        <h4>{ nweet.data.text }</h4>
-                    </div> 
+                    <Nweet key={nweet.id} nweetObj={nweet} isOwner={nweet.data.creatorId === userObj?.uid}/>
                 )}
             </div>
         </div>
