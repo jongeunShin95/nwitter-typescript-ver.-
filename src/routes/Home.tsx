@@ -42,10 +42,22 @@ const Home = ({ userObj }: HomeProps) => {
         setNweet(value);
     }
 
+    const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { target: { files }} = e;
+        const theFile = files![0];
+        const reader = new FileReader();
+        reader.onload = (finishedEvent) => {
+            console.log(finishedEvent);
+        }
+        reader.readAsDataURL(theFile);
+        console.log(theFile);
+    }
+
     return (
         <div>
             <form onSubmit={onSubmit}>
                 <input value={nweet} onChange={onChange} type="text" placeholder="What's on your mind?" maxLength={120} />
+                <input type="file" accept="image/*" onChange={onFileChange} />
                 <input type="submit" value="Nweet" /> 
             </form>
             <div>
