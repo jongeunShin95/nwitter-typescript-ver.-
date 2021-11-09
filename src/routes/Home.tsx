@@ -1,8 +1,9 @@
 import firebase from 'firebase';
 import React, { FormEvent, useEffect, useState } from 'react';
 import Nweet from '../components/Nweet';
+import { v4 as uuidv4 } from 'uuid';
 
-import { dbService } from '../fbase';
+import { dbService, storageService } from '../fbase';
 
 type nweetType = {
     data: firebase.firestore.DocumentData,
@@ -16,7 +17,7 @@ type HomeProps = {
 const Home = ({ userObj }: HomeProps) => {
     const [nweet, setNweet] = useState('');
     const [nweets, setNweets] = useState<nweetType[]>([]);
-    const [attachment, setAttachment] = useState(null);
+    const [attachment, setAttachment] = useState('');
 
     useEffect(() => {
         dbService.collection("nweets").onSnapshot(snapshot => {
@@ -30,12 +31,15 @@ const Home = ({ userObj }: HomeProps) => {
 
     const onSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        await dbService.collection("nweets").add({
-            text: nweet,
-            createdAt: Date.now(),
-            creatorId: userObj?.uid
-        });
-        setNweet("");
+        const fileRef = storageService.ref().child(`${userObj?.uid}/${uuidv4()}`);
+        const response = await fileRef.putString(attachment, "data_url");
+        console.log(response);
+        // await dbService.collection("nweets").add({
+        //     text: nweet,
+        //     createdAt: Date.now(),
+        //     creatorId: userObj?.uid
+        // });
+        // setNweet("");
     }
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +58,7 @@ const Home = ({ userObj }: HomeProps) => {
         reader.readAsDataURL(theFile);
     }
 
-    const onClearAttachment = () => setAttachment(null);
+    const onClearAttachment = () => setAttachment('');
 
     return (
         <div>
