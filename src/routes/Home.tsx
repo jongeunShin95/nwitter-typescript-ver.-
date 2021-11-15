@@ -31,15 +31,24 @@ const Home = ({ userObj }: HomeProps) => {
 
     const onSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        const fileRef = storageService.ref().child(`${userObj?.uid}/${uuidv4()}`);
-        const response = await fileRef.putString(attachment, "data_url");
-        console.log(response);
-        // await dbService.collection("nweets").add({
-        //     text: nweet,
-        //     createdAt: Date.now(),
-        //     creatorId: userObj?.uid
-        // });
-        // setNweet("");
+        let attachmentUrl = "";
+
+        if (attachment != "") {
+            const fileRef = storageService.ref().child(`${userObj?.uid}/${uuidv4()}`);
+            const response = await fileRef.putString(attachment, "data_url");
+            attachmentUrl = await response.ref.getDownloadURL();
+        }
+        const nweetObj = {
+            text: nweet,
+            createdAt: Date.now(),
+            createorId: userObj?.uid,
+            attachmentUrl
+        }
+
+        console.log(userObj?.uid);
+        await dbService.collection("nweets").add(nweetObj);
+        setNweet("");
+        setAttachment("");
     }
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +85,8 @@ const Home = ({ userObj }: HomeProps) => {
             </form>
             <div>
                 { nweets.map((nweet: nweetType) => 
-                    <Nweet key={nweet.id} nweetObj={nweet} isOwner={nweet.data.creatorId === userObj?.uid}/>
+                    <Nweet key={nweet.id} nweetObj={
+                        nweet} isOwner={nweet.data.creatorId === userObj?.uid} />
                 )}
             </div>
         </div>
