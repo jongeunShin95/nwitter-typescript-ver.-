@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 
 import firebase from 'firebase';
-import { dbService } from '../fbase';
+import { dbService, storageService } from '../fbase';
 
 type nweetType = {
     data: firebase.firestore.DocumentData,
@@ -20,7 +20,10 @@ const Nweet = ({ nweetObj, isOwner }: nweetObj) => {
     const onDeleteClick = async () => {
         const ok = window.confirm("Are you sure you want to delete this nweet?")
         console.log(ok);
-        if (ok) await dbService.doc(`nweets/${nweetObj.id}`).delete();
+        if (ok) {
+            await dbService.doc(`nweets/${nweetObj.id}`).delete();
+            await storageService.refFromURL(nweetObj.data.attachmentUrl).delete();
+        }
     }
 
     const toggleEditing = () => setEditing((prev) => !prev);

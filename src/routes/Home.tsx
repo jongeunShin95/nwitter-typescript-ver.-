@@ -27,13 +27,17 @@ const Home = ({ userObj }: HomeProps) => {
             }));
             setNweets(nweetArray);
         });
+
+        for (var i=0; i<nweets.length; ++i) {
+            console.log(nweets[i]);
+        }
     }, []);
 
     const onSubmit = async (e: FormEvent) => {
         e.preventDefault();
         let attachmentUrl = "";
 
-        if (attachment != "") {
+        if (attachment !== "") {
             const fileRef = storageService.ref().child(`${userObj?.uid}/${uuidv4()}`);
             const response = await fileRef.putString(attachment, "data_url");
             attachmentUrl = await response.ref.getDownloadURL();
@@ -41,11 +45,11 @@ const Home = ({ userObj }: HomeProps) => {
         const nweetObj = {
             text: nweet,
             createdAt: Date.now(),
-            createorId: userObj?.uid,
+            creatorId: userObj?.uid,
             attachmentUrl
         }
 
-        console.log(userObj?.uid);
+        console.log("uid: " + userObj?.uid);
         await dbService.collection("nweets").add(nweetObj);
         setNweet("");
         setAttachment("");
