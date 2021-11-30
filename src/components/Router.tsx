@@ -14,7 +14,7 @@ type RouterProps = {
 export default ({ isLoggedIn, userObj }: RouterProps) => {
     return (
         <Router>
-            { isLoggedIn && <Navigation /> }
+            { isLoggedIn && <Navigation userObj={userObj} /> }
             <Switch>
                 { isLoggedIn ?
                     <>
