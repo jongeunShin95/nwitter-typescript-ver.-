@@ -3,11 +3,12 @@ import { useHistory } from 'react-router';
 import { authService, dbService } from '../fbase';
 
 type ProfileProps = {
+    refreshUser: () => void,
     userObj: firebase.User | null
 }
 
 
-export default ({ userObj }: ProfileProps) => {
+export default ({ refreshUser, userObj }: ProfileProps) => {
     const history = useHistory();
     const [newDisplayName, setNewDisplayName] = useState(userObj?.displayName);
 
@@ -40,6 +41,7 @@ export default ({ userObj }: ProfileProps) => {
             await userObj?.updateProfile({
                 displayName: newDisplayName
             });
+            refreshUser();
         }
     }
 

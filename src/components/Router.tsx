@@ -7,11 +7,12 @@ import Navigation from './Navigation';
 import Profile from '../routes/Profile';
 
 type RouterProps = {
+    refreshUser: () => void,
     isLoggedIn: boolean | null,
     userObj: firebase.User | null
 };
 
-export default ({ isLoggedIn, userObj }: RouterProps) => {
+export default ({ refreshUser, isLoggedIn, userObj }: RouterProps) => {
     return (
         <Router>
             { isLoggedIn && <Navigation userObj={userObj} /> }
@@ -22,7 +23,7 @@ export default ({ isLoggedIn, userObj }: RouterProps) => {
                             <Home userObj={userObj} />
                         </Route>
                         <Route exact path="/profile">
-                            <Profile userObj={userObj} />
+                            <Profile userObj={userObj} refreshUser={refreshUser} />
                         </Route>
                         <Redirect from="*" to="/" />
                     </> : (
